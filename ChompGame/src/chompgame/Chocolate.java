@@ -9,6 +9,7 @@ public class Chocolate {
     public int x;
     public int y;
     public boolean isEaten;
+    public boolean isPoisoned;
     public int user;
 
     public Chocolate(int id, int x, int y, int user) {
@@ -17,5 +18,6 @@ public class Chocolate {
         this.y = y;
         this.user = user;
         isEaten = false;
+        isPoisoned = false;
     }
 }

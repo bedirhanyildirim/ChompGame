@@ -9,20 +9,51 @@ public class Bar {
 
     public Bar() {
         this.table = new Chocolate[4][7];
-        this.table = getReadyBar();
+        getReadyBar();
     }
 
-    private Chocolate[][] getReadyBar() {
-        System.out.println("barın yüksekliği: " + this.table.length);
-        System.out.println("barın genişliği: " + this.table[0].length);
+    private void getReadyBar() {
+        System.out.println("Çikolata barının yüksekliği: " + this.table.length);
+        System.out.println("Çikolata barının genişliği: " + this.table[0].length);
+        //Çikolata id sayacını başlat
         int id = 0;
+        //Barı doldurmaya başla
         for (int i = 0; i < this.table.length; i++) {
             for (int j = 0; j < this.table[0].length; j++) {
-                this.table[i][j] = new Chocolate(id,i,j,0);
+                this.table[i][j] = new Chocolate(id, i, j, 0);
                 id++;
             }
         }
-        System.out.println("Son çikolatanın id'si: " + (this.table[3][6].id+1));
-        return null;
+        //Sol alt köşedekini zehirle
+        this.table[3][0].isPoisoned = true;
+        System.out.println("Toplam çikolata sayısı: " + (this.table[3][6].id + 1));
+    }
+
+    public void eatChocolate(int x, int y) {
+        if (this.table[x][y].isEaten == true) {
+            //bu hamleyi yapamazsın, daha önce bu hamle oynandı.
+        } else {
+            if (this.table[x][y].isPoisoned == true) {
+                //oyunu bitir - kaybettin.
+            } else {
+                for (int i = x; 0 <= i; i--) {
+                    for (int j = y; j < this.table[x].length; j++) {
+                        this.table[i][j].isEaten = true; // Yenildi
+                        //this.table[x][y].user = 0; // Kim tarafından yenildi
+                    }
+                }
+            }
+        }
+    }
+
+    public void durumRapor() {
+        System.out.println("#############################################################################################################");
+        for (int i = 0; i < this.table.length; i++) {
+            for (int j = 0; j < this.table[0].length; j++) {
+                System.out.print("id: "+this.table[i][j].id + " " + this.table[i][j].isEaten + "\t");
+            }
+            System.out.println("");
+        }
+        System.out.println("#############################################################################################################");
     }
 }
