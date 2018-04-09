@@ -25,21 +25,23 @@ public class Bar {
             }
         }
         //Sol alt köşedekini zehirle
-        this.table[3][0].isPoisoned = true;
-        System.out.println("Toplam çikolata sayısı: " + (this.table[3][6].id + 1));
+        this.table[3][0].eatChocolate();
+        System.out.println("Toplam çikolata sayısı: " + (this.table.length * this.table[0].length));
     }
 
     public void eatChocolate(int x, int y) {
-        if (this.table[x][y].isEaten == true) {
+        if (this.table[x][y].isEaten() == true) {
             //bu hamleyi yapamazsın, daha önce bu hamle oynandı.
         } else {
-            if (this.table[x][y].isPoisoned == true) {
+            if (this.table[x][y].isPoisoned() == true) {
                 //oyunu bitir - kaybettin.
             } else {
                 for (int i = x; 0 <= i; i--) {
                     for (int j = y; j < this.table[x].length; j++) {
-                        this.table[i][j].isEaten = true; // Yenildi
-                        //this.table[x][y].user = 0; // Kim tarafından yenildi
+                        if(this.table[i][j].isEaten() == false){
+                            this.table[i][j].eatChocolate(); // Yenildi olarak işaretle
+                            //this.table[x][y].user = 0; // Kim tarafından yenildi
+                        }
                     }
                 }
             }
@@ -50,7 +52,7 @@ public class Bar {
         System.out.println("#############################################################################################################");
         for (int i = 0; i < this.table.length; i++) {
             for (int j = 0; j < this.table[0].length; j++) {
-                System.out.print("id: "+this.table[i][j].id + " " + this.table[i][j].isEaten + "\t");
+                System.out.print(this.table[i][j].isEaten() + "\t");
             }
             System.out.println("");
         }

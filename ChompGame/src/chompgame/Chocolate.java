@@ -3,14 +3,14 @@ package chompgame;
 /**
  * @author Bedirhan YILDIRIM
  */
-public class Chocolate {
+public class Chocolate{
 
-    public int id;
-    public int x;
-    public int y;
-    public boolean isEaten;
-    public boolean isPoisoned;
-    public int user;
+    private int id;
+    private int x;
+    private int y;
+    private boolean isEaten;
+    private boolean isPoisoned;
+    private int user;
 
     public Chocolate(int id, int x, int y, int user) {
         this.id = id;
@@ -19,5 +19,16 @@ public class Chocolate {
         this.user = user;
         isEaten = false;
         isPoisoned = false;
+    }
+    
+    public void eatChocolate(){
+        this.isEaten = true;
+    }
+    
+    public boolean isEaten(){
+        return this.isEaten;
+    }
+    public boolean isPoisoned(){
+        return this.isPoisoned;
     }
 }
