@@ -3,7 +3,7 @@ package chompgame;
 /**
  * @author Bedirhan YILDIRIM
  */
-public class Chocolate{
+public class Chocolate {
 
     private int id;
     private int x;
@@ -21,14 +21,32 @@ public class Chocolate{
         isPoisoned = false;
     }
     
-    public void eatChocolate(){
-        this.isEaten = true;
+    public void poison(){
+        this.isPoisoned = true;
     }
-    
-    public boolean isEaten(){
+
+    public void eatChocolate() {
+        this.isEaten = true;
+        //this.user = 0;
+    }
+
+    public boolean isEaten() {
         return this.isEaten;
     }
-    public boolean isPoisoned(){
+
+    public boolean isPoisoned() {
         return this.isPoisoned;
+    }
+
+    public int getChocolateID() {
+        return this.id;
+    }
+    
+    public int getXcoordinate(){
+        return this.x;
+    }
+    
+    public int getYcoordinate(){
+        return this.y;
     }
 }

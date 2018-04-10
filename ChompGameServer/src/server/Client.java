@@ -50,8 +50,7 @@ public class Client {
                 try {
 
                     sendObject("Naber?");
-                    Server.Display(id + " -> " + ois.readObject().toString());
-
+                    System.out.println(id + " -> " + ois.readObject().toString());
                 } catch (IOException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
