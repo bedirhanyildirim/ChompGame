@@ -30,6 +30,7 @@ public class Server {
         newGame.rapor();
         //newGame.eatChocolate(10);
         newGame.eatChocolate(new Chocolate(0, 1, 4, 0));
+        newGame.eatChocolate(new Chocolate(0, 2, 2, 0));
         newGame.rapor();
         try {
             this.listeningPort = inComingPort;
