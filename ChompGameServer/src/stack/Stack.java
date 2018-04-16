@@ -47,6 +47,16 @@ public class Stack<G> {
             return tempNode.data;
         }
     }
+    
+    public G peek() {
+        if (header == null) {
+            System.out.println("Stack is empty !");
+            return null;
+        } else {
+            Node<G> tempNode = header;
+            return tempNode.data;
+        }
+    }
 
     public void printStack() {
         Node<G> tempNode = header;

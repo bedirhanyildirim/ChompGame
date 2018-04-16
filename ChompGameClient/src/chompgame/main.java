@@ -1,7 +1,7 @@
 package chompgame;
 
 import client.Client;
-
+import ui.Welcome;
 /**
  * @author Bedirhan YILDIRIM
  */
@@ -10,7 +10,7 @@ public class main {
     public static void main(String[] args) {
         System.out.println("Hello");
         
-        Client cl = new Client();
-        cl.Start("127.0.0.1", 2000);
+        Welcome start = new Welcome();
+        start.setVisible(true);
     }
 }

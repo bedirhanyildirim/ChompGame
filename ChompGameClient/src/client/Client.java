@@ -1,80 +1,110 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package client;
 
+import chompgame.*;
+import ui.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static client.Client.sInput;
 
 /**
- *
- * @author bedirhan
+ * @author Bedirhan YILDIRIM
  */
-public class Client {
-    //her clientın bir soketi olmalı
-    public Socket socket;
-
-    //verileri almak için gerekli nesne
-    public ObjectInputStream sInput;
-    //verileri göndermek için gerekli nesne
-    public ObjectOutputStream sOutput;
-    public Listen listenMe;
-
-    public void Start(String ip, int port) {
-        try {
-            // Client Soket nesnesi
-            this.socket = new Socket(ip, port);
-            this.Display("Servera bağlandı");
-            // input stream
-            this.sInput = new ObjectInputStream(this.socket.getInputStream());
-            // output stream
-            this.sOutput = new ObjectOutputStream(this.socket.getOutputStream());
-            this.listenMe = new Listen();
-            this.listenMe.start();
-
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void Display(String msg) {
-
-        System.out.println(msg);
-
-    }
-
-    public void Send(Object message) {
-        try {
-            this.sOutput.writeObject(message.toString());
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-    
-    class Listen extends Thread {
+class Listen extends Thread {
 
     public void run() {
-
-        while (true) {
+        while (Client.socket.isConnected()) {
             try {
+                //Client.Display(sInput.readObject().toString());
+                Message read = (Message) (Client.sInput.readObject());
+                Client.Display(read.content.toString());
+                switch (read.type) {
+                    case CompetitorConnected:
+                        if(read.content.equals("ready")){
+                            ui.WaitCompetitor.wait.setVisible(false);
+                            ui.GameInterface.gameInterface.setVisible(true);
+                        }
+                        break;
 
-                Display(sInput.readObject().toString());
-                Send("İyiyim!");
+                    case GameOver:
+                        Client.Display(read.content.toString());
+                        break;
+
+                    case Turn:
+                        if(read.content.equals("your")){
+                            ui.GameInterface.myTurn = true;
+                        }else{
+                            ui.GameInterface.myTurn = false;
+                        }
+                        break;
+                        
+                    case Warning:
+                        Client.Display(read.content.toString());
+                        break;
+
+                    case Bar:
+                        Bar syncBar = (Bar)read.content;
+                        ui.GameInterface.board.syncBar(syncBar);
+                        ui.GameInterface.board.durumRapor();
+                        System.out.println("buradayım !!!!!!");
+                        break;
+                }
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }
 }
-}
 
+public class Client {
+
+    public static Socket socket;
+    public static ObjectInputStream sInput;
+    public static ObjectOutputStream sOutput;
+    public static Listen listenMe;
+
+    public static void Start(String ip, int port) {
+        try {
+            Client.socket = new Socket(ip, port);
+            Client.Display("Servera bağlandı");
+            Client.sInput = new ObjectInputStream(Client.socket.getInputStream());
+            Client.sOutput = new ObjectOutputStream(Client.socket.getOutputStream());
+            Client.listenMe = new Listen();
+            Client.listenMe.start();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void Stop() {
+        try {
+            if (Client.socket != null) {
+                Client.listenMe.stop();
+                Client.socket.close();
+                Client.sOutput.flush();
+                Client.sOutput.close();
+                Client.sInput.close();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void Display(String msg) {
+        System.out.println(msg);
+    }
+
+    public static void Send(Message msg) {
+        try {
+            Client.sOutput.writeObject(msg);
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+}

@@ -5,6 +5,7 @@
  */
 package chompgame;
 
+import server.Client;
 import stack.Stack;
 
 /**
@@ -13,8 +14,8 @@ import stack.Stack;
  */
 public class Game {
 
-    private Bar board;
-    private Stack<Chocolate> moves;
+    public Bar board;
+    public Stack<Chocolate> moves;
 
     public Game() {
         
@@ -32,25 +33,33 @@ public class Game {
     public void eatChocolate(Chocolate eatThisOne) {
         if (this.board.isChocolateEaten(eatThisOne) == true) {
             //this move made before, you can not
+            Message warning = new Message(Message.Message_Type.Warning);
+            warning.content = "You can not make this move. This move made before!";
+            Client targetCl = server.Server.findClient(eatThisOne.user);
+            server.Server.Send(targetCl, warning);
+            
         } else if (this.board.isChocolatePoisoned(eatThisOne) == true) {
             //this move makes game over
+            Message warning = new Message(Message.Message_Type.Warning);
+            warning.content = "You ate the poisened chocolate! You lost!";
+            Client targetCl = server.Server.findClient(eatThisOne.user);
+            server.Server.Send(targetCl, warning);
+            this.moves.push(eatThisOne); //add moves
+            
+            Message gameOver = new Message(Message.Message_Type.GameOver);
+            gameOver.content = "Loser!";
+            Client loserCl = server.Server.findClient(eatThisOne.user);
+            server.Server.Send(loserCl, gameOver);
         } else {
             this.board.eatChocolate(eatThisOne);
             this.moves.push(eatThisOne); //add moves
         }
     }
     
+    
+    
     public void eatChocolate(int id) {
-        Chocolate eatThis = this.board.findChocolate(id);
-        if (this.board.isChocolateEaten(eatThis) == true) {
-            //this move made before, you can not
-        } else if (this.board.isChocolatePoisoned(eatThis) == true) {
-            //this move makes game over
-        } else {
-            //this.board.eatChocolate(eatThis);
-            this.board.eatChocolate(eatThis.getXcoordinate(), eatThis.getYcoordinate());
-            this.moves.push(eatThis); //add moves
-        }
+        eatChocolate(this.board.findChocolate(id));
     }
 
 }

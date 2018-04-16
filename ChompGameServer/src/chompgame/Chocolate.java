@@ -3,14 +3,14 @@ package chompgame;
 /**
  * @author Bedirhan YILDIRIM
  */
-public class Chocolate {
+public class Chocolate implements java.io.Serializable {
 
-    private int id;
-    private int x;
-    private int y;
-    private boolean isEaten;
-    private boolean isPoisoned;
-    private int user;
+    public int id;
+    public int x;
+    public int y;
+    public boolean isEaten;
+    public boolean isPoisoned;
+    public int user;
 
     public Chocolate(int id, int x, int y, int user) {
         this.id = id;
@@ -20,8 +20,8 @@ public class Chocolate {
         isEaten = false;
         isPoisoned = false;
     }
-    
-    public void poison(){
+
+    public void poison() {
         this.isPoisoned = true;
     }
 
@@ -41,12 +41,12 @@ public class Chocolate {
     public int getChocolateID() {
         return this.id;
     }
-    
-    public int getXcoordinate(){
+
+    public int getXcoordinate() {
         return this.x;
     }
-    
-    public int getYcoordinate(){
+
+    public int getYcoordinate() {
         return this.y;
     }
 }

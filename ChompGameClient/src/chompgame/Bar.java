@@ -3,7 +3,7 @@ package chompgame;
 /**
  * @author Bedirhan YILDIRIM
  */
-public class Bar {
+public class Bar implements java.io.Serializable {
 
     private Chocolate[][] table;
 
@@ -20,13 +20,22 @@ public class Bar {
         //Barı doldurmaya başla
         for (int i = 0; i < this.table.length; i++) {
             for (int j = 0; j < this.table[0].length; j++) {
-                this.table[i][j] = new Chocolate(id, i, j, 0);
+                this.table[i][j] = new Chocolate(id, i, j, 100);
                 id++;
             }
         }
         //Sol alt köşedekini zehirle
-        this.table[3][0].poison();
+        this.table[table.length - 1][0].poison();
         System.out.println("Toplam çikolata sayısı: " + (this.table.length * this.table[0].length));
+    }
+    
+    public void syncBar(Bar sync) {
+        for (int i = 0; i < this.table.length; i++) {
+            for (int j = 0; j < this.table[0].length; j++) {
+                this.table[i][j].isEaten = sync.table[i][j].isEaten;
+                this.table[i][j].user = sync.table[i][j].user;
+            }
+        }
     }
 
     public void eatChocolate(Chocolate eat) {
@@ -69,11 +78,7 @@ public class Bar {
     }
 
     public boolean isChocolateEaten(int findID) {
-        if (findChocolate(findID).isEaten() == true) {
-            return true;
-        } else {
-            return false;
-        }
+        return findChocolate(findID).isEaten();
     }
 
     public boolean isChocolateEaten(Chocolate find) {

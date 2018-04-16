@@ -1,5 +1,7 @@
 package server;
 
+import chompgame.Chocolate;
+import chompgame.Message;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -19,38 +21,58 @@ public class Client {
     ObjectOutputStream oos;
     ObjectInputStream ois;
     Listen listenMe;
+    public Client competitor;
+    public boolean isPaired = false;
 
-    public Client(Socket connectionSocket, int id){
+    public Client(Socket connectionSocket, int id) {
         this.clientSocket = connectionSocket;
         this.id = id;
         try {
-            OutputStream os = clientSocket.getOutputStream();
-            oos = new ObjectOutputStream(os);
-            InputStream is = clientSocket.getInputStream();
-            ois = new ObjectInputStream(is);
+            oos = new ObjectOutputStream(clientSocket.getOutputStream());
+            ois = new ObjectInputStream(clientSocket.getInputStream());
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-        listenMe = new Listen();
+        listenMe = new Listen(this);
         listenMe.start();
+        Message sendBarFirst = new Message(Message.Message_Type.Bar);
+        sendBarFirst.content = Server.newGame.board;
+        sendObject(sendBarFirst);
     }
 
-    public void sendObject(Object message) {
+    public void sendObject(Message msg) {
         try {
-            this.oos.writeObject(message.toString());
+            this.oos.writeObject(msg);
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     class Listen extends Thread {
-
+        Client theClient;
+        Listen(Client theClient){
+            this.theClient = theClient;
+        }
         public void run() {
-            while (true) {
+            while (theClient.clientSocket.isConnected()) {
                 try {
-
-                    sendObject("Naber?");
-                    System.out.println(id + " -> " + ois.readObject().toString());
+                    Message read = (Message) (theClient.ois.readObject());
+                    switch(read.type){
+                        case Disconnect:
+                            theClient.oos.close();
+                            theClient.ois.close();
+                            theClient.clientSocket.close();
+                            break;
+                            
+                        case EatChocolate:
+                            Chocolate eatThis = (Chocolate)read.content;
+                            eatThis.user = theClient.id;
+                            Server.newGame.eatChocolate(eatThis);
+                            Message sendThisBack = new Message(Message.Message_Type.Bar);
+                            sendThisBack.content = (chompgame.Bar) Server.newGame.board;
+                            Server.Send(theClient, sendThisBack);
+                            break;
+                    }
                 } catch (IOException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
