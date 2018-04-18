@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static client.Client.sInput;
+import javax.swing.JOptionPane;
 
 /**
  * @author Bedirhan YILDIRIM
@@ -20,7 +21,7 @@ class Listen extends Thread {
             try {
                 //Client.Display(sInput.readObject().toString());
                 Message read = (Message) (Client.sInput.readObject());
-                Client.Display(read.content.toString());
+                //Client.Display(read.content.toString());
                 switch (read.type) {
                     case CompetitorConnected:
                         if(read.content.equals("ready")){
@@ -31,26 +32,34 @@ class Listen extends Thread {
 
                     case GameOver:
                         Client.Display(read.content.toString());
+                        JOptionPane.showMessageDialog(ui.GameInterface.gameInterface, "Game Over", read.content.toString(), JOptionPane.INFORMATION_MESSAGE);
                         break;
 
                     case Turn:
                         if(read.content.equals("your")){
-                            ui.GameInterface.myTurn = true;
-                        }else{
-                            ui.GameInterface.myTurn = false;
+                            //ui.GameInterface.myTurn = true;
+                            Client.whosTurn = true;
+                            ui.GameInterface.setTurn(true);
+                        }else if(read.content.equals("competitor")){
+                            //ui.GameInterface.myTurn = false;
+                            Client.whosTurn = false;
+                            ui.GameInterface.setTurn(false);
                         }
                         break;
                         
                     case Warning:
                         Client.Display(read.content.toString());
+                        JOptionPane.showMessageDialog(ui.GameInterface.gameInterface, "Warning", read.content.toString(), JOptionPane.ERROR_MESSAGE);
+                        break;
+                        
+                    case EatChocolate:
+                        Chocolate eatThis = (Chocolate)read.content;
+                        Chocolate newChoco = new Chocolate(eatThis.id,eatThis.x, eatThis.y,1);
+                        //eatThis.setCompetitor();
+                        Game.eatChocolate(newChoco);
+                        Game.rapor();
                         break;
 
-                    case Bar:
-                        Bar syncBar = (Bar)read.content;
-                        ui.GameInterface.board.syncBar(syncBar);
-                        ui.GameInterface.board.durumRapor();
-                        System.out.println("buradayım !!!!!!");
-                        break;
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -67,9 +76,12 @@ public class Client {
     public static ObjectInputStream sInput;
     public static ObjectOutputStream sOutput;
     public static Listen listenMe;
+    public static boolean whosTurn;
+    public static Game newGame = new Game();
 
     public static void Start(String ip, int port) {
         try {
+            Client.whosTurn = false;
             Client.socket = new Socket(ip, port);
             Client.Display("Servera bağlandı");
             Client.sInput = new ObjectInputStream(Client.socket.getInputStream());

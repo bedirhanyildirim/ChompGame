@@ -28,31 +28,12 @@ public class Bar implements java.io.Serializable {
         this.table[table.length - 1][0].poison();
         System.out.println("Toplam çikolata sayısı: " + (this.table.length * this.table[0].length));
     }
-    
-    public void syncBar(Bar sync) {
-        for (int i = 0; i < this.table.length; i++) {
-            for (int j = 0; j < this.table[0].length; j++) {
-                this.table[i][j].isEaten = sync.table[i][j].isEaten;
-                this.table[i][j].user = sync.table[i][j].user;
-            }
-        }
-    }
 
     public void eatChocolate(Chocolate eat) {
         for (int i = eat.getXcoordinate(); 0 <= i; i--) {
             for (int j = eat.getYcoordinate(); j < this.table[0].length; j++) {
                 if (this.table[i][j].isEaten() == false) {
-                    this.table[i][j].eatChocolate();
-                }
-            }
-        }
-    }
-
-    public void eatChocolate(int x, int y) {
-        for (int i = x; 0 <= i; i--) {
-            for (int j = y; j < this.table[0].length; j++) {
-                if (this.table[i][j].isEaten() == false) {
-                    this.table[i][j].eatChocolate();
+                    this.table[i][j].eatChocolate(eat.getUser());
                 }
             }
         }

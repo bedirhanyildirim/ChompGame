@@ -35,9 +35,6 @@ public class Client {
         }
         listenMe = new Listen(this);
         listenMe.start();
-        Message sendBarFirst = new Message(Message.Message_Type.Bar);
-        sendBarFirst.content = Server.newGame.board;
-        sendObject(sendBarFirst);
     }
 
     public void sendObject(Message msg) {
@@ -64,13 +61,31 @@ public class Client {
                             theClient.clientSocket.close();
                             break;
                             
+                        case GameOver:
+                            if(read.content.equals("you")){
+                                Message go = new Message(Message.Message_Type.GameOver);
+                                go.content = "You won!";
+                                Server.Send(theClient.competitor, go);
+                            }
+                            break;
+                            
                         case EatChocolate:
                             Chocolate eatThis = (Chocolate)read.content;
-                            eatThis.user = theClient.id;
-                            Server.newGame.eatChocolate(eatThis);
-                            Message sendThisBack = new Message(Message.Message_Type.Bar);
-                            sendThisBack.content = (chompgame.Bar) Server.newGame.board;
-                            Server.Send(theClient, sendThisBack);
+                            //eatThis.user = theClient.id;
+                            Message competitorEat = new Message(Message.Message_Type.EatChocolate);
+                            competitorEat.content = (Chocolate) eatThis;
+                            //this.theClient.competitor.sendObject(competitorEat);
+                            Server.Send(theClient.competitor, competitorEat);
+                            
+                            //Server.Display(theClient.id + " ate the chocolate: " + eatThis.toString());
+                            
+                            Message turn = new Message(Message.Message_Type.Turn);
+                            turn.content = "your";
+                            Server.Send(theClient.competitor, turn);
+
+                            Message noTurn = new Message(Message.Message_Type.Turn);
+                            noTurn.content = "competitor";
+                            Server.Send(theClient, noTurn);
                             break;
                     }
                 } catch (IOException ex) {

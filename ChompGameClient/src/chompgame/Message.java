@@ -12,7 +12,7 @@ package chompgame;
 public class Message implements java.io.Serializable {
 
     public static enum Message_Type {
-        Disconnect, CompetitorConnected, GameOver, Turn, EatChocolate, Bar, Warning
+        Disconnect, CompetitorConnected, GameOver, Turn, EatChocolate, Warning
     }
     public Message_Type type;
     public Object content;

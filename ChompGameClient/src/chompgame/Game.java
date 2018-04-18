@@ -10,16 +10,21 @@ package chompgame;
  * @author Bedirhan
  */
 public class Game {
-    public Bar board;
-    public boolean turn;
+    public static Bar board;
     
-    public void start() {
-        this.board = new Bar();
-        turn = false;
+    public static void start() {
+        Game.board = new Bar();
     }
 
-    public void rapor() {
-        this.board.durumRapor();
+    public static void rapor() {
+        Game.board.durumRapor();
+    }
+    public static void eatChocolate(Chocolate eatThisOne) {
+        Game.board.eatChocolate(eatThisOne);
+    }
+    
+    public void eatChocolate(int id) {
+        eatChocolate(this.board.findChocolate(id));
     }
     
 }

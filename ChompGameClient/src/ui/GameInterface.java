@@ -22,7 +22,8 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
      * Creates new form GameInterface
      */
     public static GameInterface gameInterface;
-    public static Bar board;
+    //public static Bar board;
+    public static javax.swing.JButton[][] board;
     public static boolean myTurn;
     
     public GameInterface() {
@@ -31,13 +32,23 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
         myTurn = false;
         this.setLocation(250, 250);
         this.setResizable(false);
-        this.board = new Bar();
-        this.board.durumRapor();
+        Game.board = new Bar();
+        Game.board.durumRapor();
+        if(client.Client.whosTurn){
+            turnText.setText("Your Turn!");
+        }else{
+            turnText.setText("Your Competition's Turn!");
+        }
+        board = new javax.swing.JButton[4][7];
+        board[0][0] = choco00;board[0][1] = choco01;board[0][2] = choco02;board[0][3] = choco03;board[0][4] = choco04;board[0][5] = choco05;board[0][6] = choco06;
+        board[1][0] = choco10;board[1][1] = choco11;board[1][2] = choco12;board[1][3] = choco13;board[1][4] = choco14;board[1][5] = choco15;board[1][6] = choco16;
+        board[2][0] = choco20;board[2][1] = choco21;board[2][2] = choco22;board[2][3] = choco23;board[2][4] = choco24;board[2][5] = choco25;board[2][6] = choco26;
+        board[3][0] = choco30;board[3][1] = choco31;board[3][2] = choco32;board[3][3] = choco33;board[3][4] = choco34;board[3][5] = choco35;board[3][6] = choco36;
         
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                int exitGame = JOptionPane.showConfirmDialog(gameInterface, "Are you sure to leave game?", "Leaving game..", JOptionPane.YES_NO_OPTION);
+                int exitGame = JOptionPane.showConfirmDialog(gameInterface, "Leaving game..", "Are you sure to leave game?", JOptionPane.YES_NO_OPTION);
                 if (exitGame == 0) {
                     client.Client.Stop();//DISCONNECT
                     System.exit(1);
@@ -53,6 +64,7 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
         enableButtons(false);
         focusButtons(false);
         enableButtons(true);
+        
         
         //Naming all buttons for actionperformed actions
         choco00.setActionCommand("00"); choco00.addActionListener(this);
@@ -85,210 +97,419 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
         choco36.setActionCommand("36"); choco36.addActionListener(this);
         
     }
+    
+    public static void setTurn(boolean b){
+        //turnText.setText(s);
+        myTurn = b;
+    }
+    
     @Override
     public void actionPerformed(ActionEvent ae) {
         String action = ae.getActionCommand();
         if(myTurn){
-            title.setText("Your Turn!");
+            turnText.setText("Your Turn!");
         }else{
-            title.setText("Your Competition's Turn!");
+            turnText.setText("Your Competition's Turn!");
         }
             Message eatThis = new Message(Message.Message_Type.EatChocolate);
+            Chocolate letsEat;
             switch (action) {
                 case "00":
                     System.out.println("choco00 tıkladın!!!");
-
-                    eatThis.content = (Chocolate)board.findChocolate(0);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[0][0];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
+                    
                     choco00.setEnabled(false);
                     break;
 
                 case "01":
                     System.out.println("choco01 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(1);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[0][1];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco01.setEnabled(false);
                     break;
 
                 case "02":
                     System.out.println("choco02 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(2);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[0][2];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco02.setEnabled(false);
                     break;
 
                 case "03":
                     System.out.println("choco03 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(3);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[0][3];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco03.setEnabled(false);
                     break;
 
                 case "04":
                     System.out.println("choco04 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(4);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[0][4];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco04.setEnabled(false);
                     break;
 
                 case "05":
                     System.out.println("choco05 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(5);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[0][5];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco05.setEnabled(false);
                     break;
 
                 case "06":
                     System.out.println("choco06 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(6);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[0][6];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco06.setEnabled(false);
                     break;
 
                 case "10":
                     System.out.println("choco10 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(7);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[1][0];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco10.setEnabled(false);
                     break;
 
                 case "11":
                     System.out.println("choco11 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(8);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[1][1];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco11.setEnabled(false);
                     break;
 
                 case "12":
                     System.out.println("choco12 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(9);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[1][2];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco12.setEnabled(false);
                     break;
 
                 case "13":
                     System.out.println("choco13 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(10);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[1][3];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco13.setEnabled(false);
                     break;
 
                 case "14":
                     System.out.println("choco14 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(11);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[1][4];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco14.setEnabled(false);
                     break;
 
                 case "15":
                     System.out.println("choco15 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(12);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[1][5];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco15.setEnabled(false);
                     break;
 
                 case "16":
                     System.out.println("choco16 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(13);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[1][6];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco16.setEnabled(false);
                     break;
 
                 case "20":
                     System.out.println("choco20 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(14);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[2][0];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco20.setEnabled(false);
                     break;
 
                 case "21":
                     System.out.println("choco21 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(15);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[2][1];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco21.setEnabled(false);
                     break;
 
                 case "22":
                     System.out.println("choco22 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(16);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[2][2];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco22.setEnabled(false);
                     break;
 
                 case "23":
                     System.out.println("choco23 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(17);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[2][3];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco23.setEnabled(false);
                     break;
 
                 case "24":
                     System.out.println("choco24 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(18);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[2][4];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco24.setEnabled(false);
                     break;
 
                 case "25":
                     System.out.println("choco25 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(19);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[2][5];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco25.setEnabled(false);
                     break;
 
                 case "26":
                     System.out.println("choco26 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(20);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[2][6];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco26.setEnabled(false);
                     break;
 
                 case "30":
                     System.out.println("choco30 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(21);
-                    client.Client.Send(eatThis);
-                    choco30.setEnabled(false);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    //letsEat = client.Client.newGame.board.table[3][0];
+                    //eatThis.content = (Chocolate)letsEat;
+                    //client.Client.Send(eatThis);
+                    //letsEat.setMe();
+                    //client.Client.newGame.eatChocolate(letsEat);
+                    
+                    JOptionPane.showMessageDialog(this, "Game Over!", "You Lost!", JOptionPane.ERROR_MESSAGE);
+                    Message go = new Message(Message.Message_Type.GameOver);
+                    go.content = "you";
+                    client.Client.Send(go);
+                    enableButtons(false);
+                    //choco30.setEnabled(false);
                     break;
 
                 case "31":
                     System.out.println("choco31 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(22);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[3][1];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco31.setEnabled(false);
                     break;
 
                 case "32":
                     System.out.println("choco32 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(23);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[3][2];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco32.setEnabled(false);
                     break;
 
                 case "33":
                     System.out.println("choco33 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(24);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[3][3];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco33.setEnabled(false);
                     break;
 
                 case "34":
                     System.out.println("choco34 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(25);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[3][4];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco34.setEnabled(false);
                     break;
 
                 case "35":
                     System.out.println("choco35 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(26);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[3][5];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco35.setEnabled(false);
                     break;
 
                 case "36":
                     System.out.println("choco36 tıkladın!!!");
-                    eatThis.content = (Chocolate)board.findChocolate(27);
+                    if (client.Client.whosTurn == false) {
+                        JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    letsEat = client.Client.newGame.board.table[3][6];
+                    eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
+                    letsEat.setMe();
+                    client.Client.newGame.eatChocolate(letsEat);
                     choco36.setEnabled(false);
                     break;
             }
@@ -296,7 +517,7 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
     }
     
     public void rapor() {
-        this.board.durumRapor();
+        Game.board.durumRapor();
     }
     
     public void enableButtons(boolean b){
@@ -352,6 +573,7 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
         choco34 = new javax.swing.JButton();
         choco35 = new javax.swing.JButton();
         choco36 = new javax.swing.JButton();
+        turnText = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -614,6 +836,8 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
             }
         });
 
+        turnText.setText("Who's turn?");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -621,21 +845,6 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(title)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(choco00, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(choco01, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(choco02, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(choco03, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(choco04, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(choco05, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(choco06, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(choco10, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -677,14 +886,36 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(choco35, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(choco36, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(choco36, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(choco00, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(choco01, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(title))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(turnText)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(choco02, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(choco03, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(choco04, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(choco05, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(choco06, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(title)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(title)
+                    .addComponent(turnText))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(choco00, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -909,6 +1140,7 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JButton choco35;
     private javax.swing.JButton choco36;
     private javax.swing.JLabel title;
+    private javax.swing.JLabel turnText;
     // End of variables declaration//GEN-END:variables
 
 }

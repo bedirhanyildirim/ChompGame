@@ -37,29 +37,29 @@ class ServerThread extends Thread {
                     if (Server.Clients.get(0).isPaired == false && Server.Clients.get(1).isPaired == false) {
                         Server.competitorClients[0] = Server.Clients.get(0);
                         Server.competitorClients[1] = Server.Clients.get(1);
-                        
+
                         Server.competitorClients[0].competitor = Server.competitorClients[1];
                         Server.competitorClients[0].isPaired = true;
-                        
+
                         Server.competitorClients[1].competitor = Server.competitorClients[0];
                         Server.competitorClients[1].isPaired = true;
-                        
+
                         Message msg0 = new Message(Message.Message_Type.CompetitorConnected);
                         msg0.content = "ready";
                         Server.Send(Server.competitorClients[0], msg0);
-                        
+
                         Message msg1 = new Message(Message.Message_Type.CompetitorConnected);
                         msg1.content = "ready";
                         Server.Send(Server.competitorClients[1], msg1);
-                        
+
                         System.out.println("eşleştirildi");
-                        
+
                         Message turn = new Message(Message.Message_Type.Turn);
                         turn.content = "your";
                         Server.Send(Server.competitorClients[0], turn);
-                        
+
                         Message noTurn = new Message(Message.Message_Type.Turn);
-                        noTurn.content = "not you";
+                        noTurn.content = "competitor";
                         Server.Send(Server.competitorClients[1], noTurn);
                     }
                 }
@@ -79,11 +79,11 @@ public class Server {
     public static ServerThread serverT;
     public static ArrayList<Client> Clients = new ArrayList<>();
     public static Client[] competitorClients = new Client[2];
-    public static Game newGame = new Game();
+    //public static Game newGame = new Game();
 
     public static void start(int inComingPort) {
-        newGame.start();
-        newGame.rapor();
+        //newGame.start();
+        //newGame.rapor();
         //newGame.eatChocolate(10);
         //newGame.eatChocolate(new Chocolate(0, 1, 4, 0));
         //newGame.eatChocolate(new Chocolate(0, 2, 2, 0));
@@ -101,7 +101,7 @@ public class Server {
     public static void Send(Client cl, Message msg) {
         try {
             cl.oos.writeObject(msg);
-            newGame.rapor();
+            //newGame.rapor();
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }

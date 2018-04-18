@@ -1,61 +1,52 @@
 package chompgame;
 
+import javax.swing.JOptionPane;
+
 /**
  * @author Bedirhan YILDIRIM
  */
-public class Bar implements java.io.Serializable {
+public class Bar {
 
-    private Chocolate[][] table;
+    public static Chocolate[][] table;
 
     public Bar() {
-        this.table = new Chocolate[4][7];
+        Bar.table = new Chocolate[4][7];
         getReadyBar();
     }
 
-    private void getReadyBar() {
-        System.out.println("Çikolata barının yüksekliği: " + this.table.length);
-        System.out.println("Çikolata barının genişliği: " + this.table[0].length);
+    public void getReadyBar() {
+        System.out.println("Çikolata barının yüksekliği: " + Bar.table.length);
+        System.out.println("Çikolata barının genişliği: " + Bar.table[0].length);
         //Çikolata id sayacını başlat
         int id = 0;
         //Barı doldurmaya başla
-        for (int i = 0; i < this.table.length; i++) {
-            for (int j = 0; j < this.table[0].length; j++) {
-                this.table[i][j] = new Chocolate(id, i, j, 100);
+        for (int i = 0; i < Bar.table.length; i++) {
+            for (int j = 0; j < Bar.table[0].length; j++) {
+                Bar.table[i][j] = new Chocolate(id, i, j, 100);
                 id++;
             }
         }
         //Sol alt köşedekini zehirle
-        this.table[table.length - 1][0].poison();
-        System.out.println("Toplam çikolata sayısı: " + (this.table.length * this.table[0].length));
-    }
-    
-    public void syncBar(Bar sync) {
-        for (int i = 0; i < this.table.length; i++) {
-            for (int j = 0; j < this.table[0].length; j++) {
-                this.table[i][j].isEaten = sync.table[i][j].isEaten;
-                this.table[i][j].user = sync.table[i][j].user;
-            }
-        }
+        Bar.table[3][0].poison();
+        System.out.println("Toplam çikolata sayısı: " + (Bar.table.length * Bar.table[0].length));
     }
 
     public void eatChocolate(Chocolate eat) {
-        for (int i = eat.getXcoordinate(); 0 <= i; i--) {
-            for (int j = eat.getYcoordinate(); j < this.table[0].length; j++) {
-                if (this.table[i][j].isEaten() == false) {
-                    this.table[i][j].eatChocolate();
+        client.Client.Display(""+eat.user);
+        client.Client.Display(""+eat.isPoisoned);
+        //if (eat.isPoisoned() == true) {
+            //JOptionPane.showMessageDialog(ui.GameInterface.gameInterface, "Game Over", "You lost!", JOptionPane.ERROR_MESSAGE);
+        //} else {
+            for (int i = eat.getXcoordinate(); 0 <= i; i--) {
+                for (int j = eat.getYcoordinate(); j < Bar.table[0].length; j++) {
+                    if (Bar.table[i][j].isEaten() == false) {
+                        Bar.table[i][j].eatChocolate(eat.getUser());
+                        ui.GameInterface.board[i][j].setEnabled(false);
+                    }
                 }
             }
-        }
-    }
-
-    public void eatChocolate(int x, int y) {
-        for (int i = x; 0 <= i; i--) {
-            for (int j = y; j < this.table[0].length; j++) {
-                if (this.table[i][j].isEaten() == false) {
-                    this.table[i][j].eatChocolate();
-                }
-            }
-        }
+        //}
+        Game.rapor();
     }
 
     public Chocolate findChocolate(int findID) {
@@ -85,11 +76,11 @@ public class Bar implements java.io.Serializable {
         return isChocolateEaten(find.getChocolateID());
     }
 
-    public void durumRapor() {
+    public static void durumRapor() {
         System.out.println("#############################################################################################################");
-        for (int i = 0; i < this.table.length; i++) {
-            for (int j = 0; j < this.table[0].length; j++) {
-                System.out.print(this.table[i][j].isEaten() + "\t");
+        for (int i = 0; i < Bar.table.length; i++) {
+            for (int j = 0; j < Bar.table[0].length; j++) {
+                System.out.print(Bar.table[i][j].isEaten() + "\t");
             }
             System.out.println("");
         }
