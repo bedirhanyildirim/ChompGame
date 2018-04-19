@@ -5,10 +5,14 @@
  */
 package ui;
 
+import client.Client;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,12 +25,17 @@ public class WaitCompetitor extends javax.swing.JFrame implements ActionListener
      * Creates new form WaitCompetitor
      */
     public static WaitCompetitor wait;
+
     public WaitCompetitor() {
         initComponents();
         wait = this;
         this.setResizable(false);
         this.setLocation(250, 250);
-        this.setSize(250, 260);
+        this.setSize(250, 300);
+        ImageIcon ii = new ImageIcon(this.getClass().getResource("../img/loading.gif"));
+        gifLabel.setIcon(ii);
+        gifLabel.setText("");
+        this.setLocationRelativeTo(null);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -53,19 +62,27 @@ public class WaitCompetitor extends javax.swing.JFrame implements ActionListener
     private void initComponents() {
 
         title = new javax.swing.JLabel();
+        gifLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         title.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         title.setText("Waiting Competitor");
 
+        gifLabel.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(title)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(title))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(gifLabel)))
                 .addContainerGap(42, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -73,7 +90,9 @@ public class WaitCompetitor extends javax.swing.JFrame implements ActionListener
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(title)
-                .addContainerGap(192, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(gifLabel)
+                .addContainerGap(158, Short.MAX_VALUE))
         );
 
         pack();
@@ -115,6 +134,7 @@ public class WaitCompetitor extends javax.swing.JFrame implements ActionListener
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel gifLabel;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 

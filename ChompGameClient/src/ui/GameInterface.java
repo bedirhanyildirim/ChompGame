@@ -10,13 +10,45 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Bedirhan
  */
+
+
+
 public class GameInterface extends javax.swing.JFrame implements ActionListener  {
+    
+    class gameThread extends Thread{
+
+        public void run(){
+            while(true){
+                try {
+                    if(client.Client.whosTurn == true){
+                        turnText.setText("Your Turn!");
+                        myTurn = true;
+                    }else{
+                        turnText.setText("Your Competition's Turn!");
+                        myTurn = false;
+                    }
+                    if(Game.isGameOver == true && Game.amIWinner == 1){
+                        enableButtons(false);
+                        turnText.setText("You won!");
+                    }else if(Game.isGameOver == true && Game.amIWinner == 2){
+                        turnText.setText("You Lost!");
+                    }
+                    sleep(500);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(GameInterface.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+    }
 
     /**
      * Creates new form GameInterface
@@ -25,6 +57,7 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
     //public static Bar board;
     public static javax.swing.JButton[][] board;
     public static boolean myTurn;
+    public static gameThread gameT;
     
     public GameInterface() {
         initComponents();
@@ -32,13 +65,16 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
         myTurn = false;
         this.setLocation(250, 250);
         this.setResizable(false);
-        Game.board = new Bar();
-        Game.board.durumRapor();
+        client.Client.newGame.board = new Bar();
+        client.Client.newGame.board.durumRapor();
+        gameT = new gameThread();
+        gameT.start();
         if(client.Client.whosTurn){
             turnText.setText("Your Turn!");
         }else{
             turnText.setText("Your Competition's Turn!");
         }
+        
         board = new javax.swing.JButton[4][7];
         board[0][0] = choco00;board[0][1] = choco01;board[0][2] = choco02;board[0][3] = choco03;board[0][4] = choco04;board[0][5] = choco05;board[0][6] = choco06;
         board[1][0] = choco10;board[1][1] = choco11;board[1][2] = choco12;board[1][3] = choco13;board[1][4] = choco14;board[1][5] = choco15;board[1][6] = choco16;
@@ -98,6 +134,16 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
         
     }
     
+    public void syncBar(){
+        for (int i = 0; i < GameInterface.board.length; i++) {
+            for (int j = 0; j < GameInterface.board[0].length; j++) {
+                if(client.Client.newGame.board.table[i][j].isEaten() == true){
+                    GameInterface.board[i][j].setEnabled(false);
+                }
+            }
+        }
+    }
+    
     public static void setTurn(boolean b){
         //turnText.setText(s);
         myTurn = b;
@@ -112,7 +158,7 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
             turnText.setText("Your Competition's Turn!");
         }
             Message eatThis = new Message(Message.Message_Type.EatChocolate);
-            Chocolate letsEat;
+            Chocolate letsEat = new Chocolate(100,100,100,100);
             switch (action) {
                 case "00":
                     System.out.println("choco00 tıkladın!!!");
@@ -135,7 +181,9 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
                         JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
                         break;
                     }
+                    System.out.println(client.Client.newGame.board.table[0][1].getChocolateID());
                     letsEat = client.Client.newGame.board.table[0][1];
+                    System.out.println(letsEat.getChocolateID());
                     eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
                     letsEat.setMe();
@@ -149,7 +197,9 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
                         JOptionPane.showMessageDialog(this, "Wait your turn!", "It is not your turn..", JOptionPane.ERROR_MESSAGE);
                         break;
                     }
+                    System.out.println(client.Client.newGame.board.table[0][2].getChocolateID());
                     letsEat = client.Client.newGame.board.table[0][2];
+                    System.out.println(letsEat.getChocolateID());
                     eatThis.content = (Chocolate)letsEat;
                     client.Client.Send(eatThis);
                     letsEat.setMe();
@@ -426,6 +476,8 @@ public class GameInterface extends javax.swing.JFrame implements ActionListener 
                     go.content = "you";
                     client.Client.Send(go);
                     enableButtons(false);
+                    Game.isGameOver = true;
+                    Game.amIWinner = 2;
                     //choco30.setEnabled(false);
                     break;
 

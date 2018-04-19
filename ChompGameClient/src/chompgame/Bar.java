@@ -10,7 +10,7 @@ public class Bar {
     public static Chocolate[][] table;
 
     public Bar() {
-        Bar.table = new Chocolate[4][7];
+        table = new Chocolate[4][7];
         getReadyBar();
     }
 
@@ -20,40 +20,36 @@ public class Bar {
         //Çikolata id sayacını başlat
         int id = 0;
         //Barı doldurmaya başla
-        for (int i = 0; i < Bar.table.length; i++) {
-            for (int j = 0; j < Bar.table[0].length; j++) {
-                Bar.table[i][j] = new Chocolate(id, i, j, 100);
+        for (int i = 0; i < table.length; i++) {
+            for (int j = 0; j < table[0].length; j++) {
+                this.table[i][j] = new Chocolate(id, i, j, 100);
                 id++;
             }
         }
         //Sol alt köşedekini zehirle
-        Bar.table[3][0].poison();
-        System.out.println("Toplam çikolata sayısı: " + (Bar.table.length * Bar.table[0].length));
+        //client.Client.newGame.board.table[3][0].poison();
+        System.out.println("Toplam çikolata sayısı: " + (client.Client.newGame.board.table.length * client.Client.newGame.board.table[0].length));
     }
 
     public void eatChocolate(Chocolate eat) {
         client.Client.Display(""+eat.user);
         client.Client.Display(""+eat.isPoisoned);
-        //if (eat.isPoisoned() == true) {
-            //JOptionPane.showMessageDialog(ui.GameInterface.gameInterface, "Game Over", "You lost!", JOptionPane.ERROR_MESSAGE);
-        //} else {
             for (int i = eat.getXcoordinate(); 0 <= i; i--) {
-                for (int j = eat.getYcoordinate(); j < Bar.table[0].length; j++) {
-                    if (Bar.table[i][j].isEaten() == false) {
-                        Bar.table[i][j].eatChocolate(eat.getUser());
+                for (int j = eat.getYcoordinate(); j < table[0].length; j++) {
+                    if (table[i][j].isEaten() == false) {
+                        table[i][j].eatChocolate(eat.getUser());
                         ui.GameInterface.board[i][j].setEnabled(false);
                     }
                 }
             }
-        //}
         Game.rapor();
     }
 
     public Chocolate findChocolate(int findID) {
-        for (int i = 0; i < this.table.length; i++) {
-            for (int j = 0; j < this.table[0].length; j++) {
-                if (this.table[i][j].getChocolateID() == findID) {
-                    return this.table[i][j];
+        for (int i = 0; i < table.length; i++) {
+            for (int j = 0; j < table[0].length; j++) {
+                if (table[i][j].getChocolateID() == findID) {
+                    return table[i][j];
                 }
             }
         }
@@ -78,9 +74,9 @@ public class Bar {
 
     public static void durumRapor() {
         System.out.println("#############################################################################################################");
-        for (int i = 0; i < Bar.table.length; i++) {
-            for (int j = 0; j < Bar.table[0].length; j++) {
-                System.out.print(Bar.table[i][j].isEaten() + "\t");
+        for (int i = 0; i < table.length; i++) {
+            for (int j = 0; j < table[0].length; j++) {
+                System.out.print("id: "+table[i][j].getChocolateID()+" "+table[i][j].isEaten() + "\t");
             }
             System.out.println("");
         }

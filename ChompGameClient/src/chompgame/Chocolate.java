@@ -5,60 +5,60 @@ package chompgame;
  */
 public class Chocolate implements java.io.Serializable {
 
-    public static int id;
-    public static int x;
-    public static int y;
-    public static boolean isEaten;
-    public static boolean isPoisoned;
-    public static int user;
+    public int id;
+    public int x;
+    public int y;
+    public boolean isEaten;
+    public boolean isPoisoned;
+    public int user;
 
     public Chocolate(int id, int x, int y, int user) {
-        Chocolate.id = id;
-        Chocolate.x = x;
-        Chocolate.y = y;
-        Chocolate.user = user;
-        Chocolate.isEaten = false;
-        Chocolate.isPoisoned = false;
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.user = user;
+        this.isEaten = false;
+        this.isPoisoned = false;
     }
 
     public void poison() {
-        Chocolate.isPoisoned = true;
+        this.isPoisoned = true;
     }
 
     public void eatChocolate(int us) {
-        Chocolate.isEaten = true;
-        Chocolate.user = us;
+        this.isEaten = true;
+        this.user = us;
     }
 
     public boolean isEaten() {
-        return Chocolate.isEaten;
+        return this.isEaten;
     }
 
     public boolean isPoisoned() {
-        return Chocolate.isPoisoned;
+        return this.isPoisoned;
     }
 
     public int getChocolateID() {
-        return Chocolate.id;
+        return this.id;
     }
 
     public int getXcoordinate() {
-        return Chocolate.x;
+        return this.x;
     }
 
     public int getYcoordinate() {
-        return Chocolate.y;
+        return this.y;
     }
     
     public int getUser(){
-        return Chocolate.user;
+        return this.user;
     }
     
     public void setMe(){
-        Chocolate.user = 0;
+        this.user = 0;
     }
     
     public void setCompetitor(){
-        Chocolate.user = 1;
+        this.user = 1;
     }
 }

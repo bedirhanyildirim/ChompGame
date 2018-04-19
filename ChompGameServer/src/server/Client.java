@@ -71,13 +71,11 @@ public class Client {
                             
                         case EatChocolate:
                             Chocolate eatThis = (Chocolate)read.content;
-                            //eatThis.user = theClient.id;
                             Message competitorEat = new Message(Message.Message_Type.EatChocolate);
                             competitorEat.content = (Chocolate) eatThis;
-                            //this.theClient.competitor.sendObject(competitorEat);
                             Server.Send(theClient.competitor, competitorEat);
                             
-                            //Server.Display(theClient.id + " ate the chocolate: " + eatThis.toString());
+                            Server.Display(theClient.id + " ate the chocolate: " + eatThis.getXcoordinate() + " : " + eatThis.getYcoordinate());
                             
                             Message turn = new Message(Message.Message_Type.Turn);
                             turn.content = "your";

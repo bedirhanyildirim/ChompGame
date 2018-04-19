@@ -33,6 +33,8 @@ class Listen extends Thread {
                     case GameOver:
                         Client.Display(read.content.toString());
                         JOptionPane.showMessageDialog(ui.GameInterface.gameInterface, "Game Over", read.content.toString(), JOptionPane.INFORMATION_MESSAGE);
+                        Game.isGameOver = true;
+                        Game.amIWinner = 1;
                         break;
 
                     case Turn:
@@ -55,7 +57,7 @@ class Listen extends Thread {
                     case EatChocolate:
                         Chocolate eatThis = (Chocolate)read.content;
                         Chocolate newChoco = new Chocolate(eatThis.id,eatThis.x, eatThis.y,1);
-                        //eatThis.setCompetitor();
+                        newChoco.setCompetitor();
                         Game.eatChocolate(newChoco);
                         Game.rapor();
                         break;
@@ -88,6 +90,7 @@ public class Client {
             Client.sOutput = new ObjectOutputStream(Client.socket.getOutputStream());
             Client.listenMe = new Listen();
             Client.listenMe.start();
+            newGame.start();
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }

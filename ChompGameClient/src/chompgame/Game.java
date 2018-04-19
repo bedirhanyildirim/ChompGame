@@ -11,9 +11,13 @@ package chompgame;
  */
 public class Game {
     public static Bar board;
+    public static boolean isGameOver;
+    public static int amIWinner;
     
     public static void start() {
-        Game.board = new Bar();
+        board = new Bar();
+        isGameOver = false;
+        amIWinner = 0;
     }
 
     public static void rapor() {
